@@ -1,0 +1,4 @@
+initramfs*.cpio*
+initramfs*.tar*
+linux*
+.*.swp

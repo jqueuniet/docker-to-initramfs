@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -x
+set -e
+
+# Mounting pseudo-filesystems
+/bin/mount -t sysfs -o nosuid,nodev,noexec sysfs /sys
+/bin/mount -t proc -o nosuid,nodev,noexec proc /proc
+
+/bin/mount -t devtmpfs -o nosuid,noexec,size=50%,mode=0755 udev /dev
+/bin/mkdir /dev/pts
+/bin/mount -t devpts -o nosuid,noexec,gid=5,mode=0620 devpts /dev/pts || true
+/bin/mount -t tmpfs -o nosuid,nodev,noexec,size=10%,mode=0755 tmpfs /run
+
+# Starting systemd
+exec /sbin/init 2

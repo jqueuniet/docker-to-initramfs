@@ -1,0 +1,19 @@
+FROM debian:bullseye-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -y update
+# Basic dependencies
+RUN apt-get -y install --no-install-recommends linux-image-amd64 systemd-sysv
+# We need to setup some pseudo-filesystems manually before handing over to the actual init
+COPY init /init
+
+# Useful stuff you might need in a real worl usecase
+RUN apt-get -y install --no-install-recommends iproute2 isc-dhcp-client
+# Install whatever else you need
+# Typical layer efficiency isn't really necessary as this image probably isn't leaving your computer
+RUN apt-get -y install --no-install-recommends pciutils dmidecode lldpd python3 python3-pip python3-requests
+RUN pip3 install pynetbox
+
+# You might need to login later
+RUN echo 'root:rootmydocker' | chpasswd
